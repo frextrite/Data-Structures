@@ -12,7 +12,7 @@ struct Node *get_new_node() {
     return (struct Node *)malloc(sizeof(struct Node));
 }
 
-void insert(struct Node **start, int x) {
+void insertNode(struct Node **start, int x) {
     struct Node *temp = *start;
     struct Node *new_node = get_new_node();
 
@@ -26,7 +26,7 @@ void insert(struct Node **start, int x) {
             new_node->next = temp;
             *start = new_node;
         } else {
-            while(temp->next != NULL && temp->value < x) {
+            while(temp->next != NULL && temp->next->value < x) {
                 temp = temp->next;
             }
             new_node->value = x;
@@ -36,23 +36,58 @@ void insert(struct Node **start, int x) {
     }
 }
 
-void print(struct Node *start) {
+int deleteNode(struct Node **start, int x) {
+    struct Node *temp = *start;
+    if(temp == NULL) return -1;
+    if(temp->value == x) {
+        if(temp->next == NULL) {
+            *start = NULL;
+            free(temp);
+        } else {
+            struct Node *toDelete = temp;
+            *start = temp->next;
+        }        
+        return x;
+    }
+    while(temp != NULL && temp->next != NULL) {
+        if(temp->next->value == x) {
+            struct Node *toDelete = temp->next;
+            temp->next = temp->next->next;
+            free(toDelete);
+            return x;
+        }
+        temp = temp->next;
+    }
+    return -1;
+}
+
+void printList(struct Node *start) {
     struct Node *temp = start;
-    printf("\nLinked List\n");
     while(temp != NULL) {
         printf("%d ", temp->value);
         temp = temp->next;
     }
+    printf("\n");
 }
 
 int main() {
     struct Node *start = NULL;
-    insert(&start, 10);
-    insert(&start, 15);
-    insert(&start, 16);
-    print(start);
-    insert(&start, 20);
-    insert(&start, 5);
-    print(start);
+    insertNode(&start, 10);
+    insertNode(&start, 15);
+    insertNode(&start, 16);
+    printList(start);
+    insertNode(&start, 20);
+    insertNode(&start, 5);
+    printList(start);
+    deleteNode(&start, 10);
+    deleteNode(&start, 5);
+    printList(start);
+    insertNode(&start, 1);
+    insertNode(&start, 4);
+    insertNode(&start, 3);
+    insertNode(&start, 50);
+    printList(start);
+    deleteNode(&start, 50);
+    printList(start);
     return 0;
 }
