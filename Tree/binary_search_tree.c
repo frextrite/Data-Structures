@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 struct Tree {
     int value;
@@ -58,6 +59,21 @@ void printInorder(struct Tree *tree) {
     printInorder(tree->right);
 }
 
+bool search(struct Tree *node, int x) {
+    if(node == NULL) {
+        return false;
+    }
+    if(node->value == x) {
+        return true;
+    }
+    if(node->value > x) {
+        return search(node->left, x);
+    }
+    if(node->value < x) {
+        return search(node->right, x);
+    }
+}
+
 int main() {
     struct Tree *tree = createTree(50);
     insertNode(tree, 76);
@@ -68,5 +84,15 @@ int main() {
     insertNode(tree, 64);
     insertNode(tree, 52);
     printInorder(tree);
+    printf("\n");
+    if(search(tree, 64))
+        printf("64 found\n");
+    else
+        printf("64 doesnt exist\n");
+
+    if(search(tree, 89))
+        printf("89 found\n");
+    else
+        printf("89 doesnt exist\n");
     return 0;
 }
