@@ -59,12 +59,12 @@ void printInorder(struct Tree *tree) {
     printInorder(tree->right);
 }
 
-bool search(struct Tree *node, int x) {
+struct Tree* search(struct Tree *node, int x) {
     if(node == NULL) {
-        return false;
+        return NULL;
     }
     if(node->value == x) {
-        return true;
+        return node;
     }
     if(node->value > x) {
         return search(node->left, x);
