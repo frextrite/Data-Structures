@@ -2,10 +2,11 @@
 #include <stdlib.h>
 
 struct Heap { // max heap
+	int *a; // array
 	int size; // current heap size
 };
 
-void heapify(struct Heap*, int*, int);
+void heapify(struct Heap*, int);
 
 void swap(int *x, int *y) {
 	int temp = *x;
@@ -37,34 +38,34 @@ void insert(struct Heap *h, int *a, int x) {
 	}
 }
 
-void heapify(struct Heap *h, int *a, int i) {
+void heapify(struct Heap *h, int i) {
 	int l = childLeft(i);
 	int r = childRight(i);
 	int largest = i;
-	if(l < h->size && a[l] > a[largest])
+	if(l < h->size && h->a[l] > h->a[largest])
 		largest = l;
-	if(r < h->size && a[r] > a[largest])
+	if(r < h->size && h->a[r] > h->a[largest])
 		largest = r;
 	if(largest != i) {
-		swap(&a[largest], &a[i]);
-		heapify(h, a, largest);
+		swap(&h->a[largest], &h->a[i]);
+		heapify(h, largest);
 	}
 }
 
-void heapSort(struct Heap *h, int *a) {
+void heapSort(struct Heap *h) {
 	for(int i = (h->size-1) / 2; i >= 0; i--) {
-		heapify(h, a, i);
+		heapify(h, i);
 	}
 	for(int i = h->size-1; i >= 0; i --) {
-		swap(&a[0], &a[i]);
+		swap(&h->a[0], &h->a[i]);
 		h->size--;
-		heapify(h, a, 0);
+		heapify(h, 0);
 	}
 }
 
-void printArray(struct Heap *h, int *a) {
+void printArray(struct Heap *h) {
 	for(int i = 0; i < h->size; i++) {
-		printf("%d ", a[i]);
+		printf("%d ", h->a[i]);
 	}
 }
 
@@ -72,8 +73,9 @@ int main() {
 	int a[] = {15, 14, 43, 32, 19, 8, 1, 7, 6, 20};
 	struct Heap *h = (struct Heap *)malloc(sizeof(struct Heap));
 	h->size = 10;
-	heapSort(h, a);
+	h->a = a;
+	heapSort(h);
 	h->size = 10;
-	printArray(h, a);
+	printArray(h);
 	return 0;
 }
